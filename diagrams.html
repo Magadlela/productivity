@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrams - Productivity Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.5.5/joint.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <h1>Productivity Hub</h1>
+            </div>
+            <div class="global-search">
+                <input type="text" id="globalSearch" placeholder="Search across all...">
+                <button id="searchButton"><i class="fas fa-search"></i></button>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li>
+                        <a href="index.html">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="kanban.html">
+                            <i class="fas fa-columns"></i>
+                            <span>Kanban Board</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="notes.html">
+                            <i class="fas fa-sticky-note"></i>
+                            <span>Notes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="todo.html">
+                            <i class="fas fa-tasks"></i>
+                            <span>To-Do List</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="planning.html">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Planning</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="diagrams.html">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>Diagrams</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="diagrams-container">
+                <div class="diagrams-header">
+                    <h1>Diagrams</h1>
+                    <div class="diagrams-actions">
+                        <button class="btn" onclick="showNewDiagramModal()">
+                            <i class="fas fa-plus"></i> New Diagram
+                        </button>
+                        <button class="btn" onclick="exportDiagram()">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                        <button class="btn" onclick="importDiagram()">
+                            <i class="fas fa-upload"></i> Import
+                        </button>
+                    </div>
+                </div>
+
+                <div class="diagrams-grid">
+                    <div class="diagrams-sidebar">
+                        <div class="diagram-templates">
+                            <h2>Templates</h2>
+                            <div class="template-list">
+                                <div class="template-item" onclick="createDiagram('flowchart')">
+                                    <i class="fas fa-project-diagram"></i>
+                                    <span>Flowchart</span>
+                                </div>
+                                <div class="template-item" onclick="createDiagram('mindmap')">
+                                    <i class="fas fa-sitemap"></i>
+                                    <span>Mind Map</span>
+                                </div>
+                                <div class="template-item" onclick="createDiagram('orgchart')">
+                                    <i class="fas fa-users"></i>
+                                    <span>Org Chart</span>
+                                </div>
+                                <div class="template-item" onclick="createDiagram('process')">
+                                    <i class="fas fa-cogs"></i>
+                                    <span>Process</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="diagram-elements">
+                            <h2>Elements</h2>
+                            <div class="elements-list">
+                                <div class="element-item" draggable="true" data-type="rectangle">
+                                    <i class="fas fa-square"></i>
+                                    <span>Rectangle</span>
+                                </div>
+                                <div class="element-item" draggable="true" data-type="circle">
+                                    <i class="fas fa-circle"></i>
+                                    <span>Circle</span>
+                                </div>
+                                <div class="element-item" draggable="true" data-type="diamond">
+                                    <i class="fas fa-diamond"></i>
+                                    <span>Diamond</span>
+                                </div>
+                                <div class="element-item" draggable="true" data-type="arrow">
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span>Arrow</span>
+                                </div>
+                                <div class="element-item" draggable="true" data-type="text">
+                                    <i class="fas fa-font"></i>
+                                    <span>Text</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="diagram-workspace">
+                        <div class="toolbar">
+                            <button class="tool-btn" onclick="undo()">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                            <button class="tool-btn" onclick="redo()">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <button class="tool-btn" onclick="zoomIn()">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <button class="tool-btn" onclick="zoomOut()">
+                                <i class="fas fa-search-minus"></i>
+                            </button>
+                            <button class="tool-btn" onclick="fitToScreen()">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="tool-btn" onclick="deleteSelected()">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <div id="diagram-container"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- New Diagram Modal -->
+    <div class="modal" id="newDiagramModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>New Diagram</h2>
+                <button class="close-button" onclick="closeNewDiagramModal()">&times;</button>
+            </div>
+            <form id="diagramForm" onsubmit="createNewDiagram(event)">
+                <div class="form-group">
+                    <label for="diagramTitle">Title</label>
+                    <input type="text" id="diagramTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="diagramType">Type</label>
+                    <select id="diagramType" required>
+                        <option value="flowchart">Flowchart</option>
+                        <option value="mindmap">Mind Map</option>
+                        <option value="orgchart">Organization Chart</option>
+                        <option value="process">Process</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="diagramDescription">Description</label>
+                    <textarea id="diagramDescription"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Create Diagram</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeNewDiagramModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.5.5/joint.min.js"></script>
+    <script src="search.js"></script>
+    <script src="shortcuts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script src="shared.js"></script>
+    <script src="diagrams.js"></script>
+</body>
+</html> 

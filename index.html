@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Productivity Hub</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="logo">
+                <a href="index.html">
+                    <i class="fas fa-tasks"></i>
+                    <span>Productivity</span>
+                </a>
+            </div>
+            <nav>
+                <a href="index.html" class="active">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="kanban.html">
+                    <i class="fas fa-columns"></i>
+                    <span>Kanban Board</span>
+                </a>
+                <a href="planning.html">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Planning</span>
+                </a>
+                <a href="diagrams.html">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Diagrams</span>
+                </a>
+                <a href="notes.html">
+                    <i class="fas fa-sticky-note"></i>
+                    <span>Notes</span>
+                </a>
+                <a href="todo.html">
+                    <i class="fas fa-check-square"></i>
+                    <span>To-Do List</span>
+                </a>
+            </nav>
+            <div class="global-search">
+                <input type="text" id="globalSearch" placeholder="Search across all...">
+                <button id="searchButton"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+                <div class="user-menu">
+                    <i class="fas fa-bell"></i>
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </header>
+
+            <div class="dashboard">
+                <h1>Welcome to Your Productivity Hub</h1>
+                
+                <div class="tools-grid">
+                    <a href="kanban.html" class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-columns"></i>
+                        </div>
+                        <h3>Kanban Board</h3>
+                        <p>Organize your projects with a visual task management system</p>
+                    </a>
+
+                    <a href="notes.html" class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-sticky-note"></i>
+                        </div>
+                        <h3>Notes</h3>
+                        <p>Capture your thoughts and ideas with rich text editing</p>
+                    </a>
+
+                    <a href="todo.html" class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <h3>To-Do List</h3>
+                        <p>Manage your daily tasks and priorities</p>
+                    </a>
+                </div>
+
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="stat-info">
+                            <h4>Completed Tasks</h4>
+                            <p>0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-info">
+                            <h4>Pending Tasks</h4>
+                            <p>0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-sticky-note"></i>
+                        <div class="stat-info">
+                            <h4>Active Notes</h4>
+                            <p>0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+    <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
+    <script src="search.js"></script>
+    <script src="shortcuts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script src="shared.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

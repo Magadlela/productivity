@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticky Notes - Productivity App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="logo">
+                <a href="index.html">
+                    <i class="fas fa-tasks"></i>
+                    <span>Productivity</span>
+                </a>
+            </div>
+            <nav>
+                <a href="index.html">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="kanban.html">
+                    <i class="fas fa-columns"></i>
+                    <span>Kanban Board</span>
+                </a>
+                <a href="planning.html">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Planning</span>
+                </a>
+                <a href="diagrams.html">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Diagrams</span>
+                </a>
+                <a href="notes.html" class="active">
+                    <i class="fas fa-sticky-note"></i>
+                    <span>Notes</span>
+                </a>
+                <a href="todo.html">
+                    <i class="fas fa-check-square"></i>
+                    <span>To-Do List</span>
+                </a>
+            </nav>
+            <div class="global-search">
+                <input type="text" id="globalSearch" placeholder="Search across all...">
+                <button id="searchButton"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="notes-container">
+                <div class="notes-header">
+                    <h1>Sticky Notes</h1>
+                    <div class="notes-actions">
+                        <button id="addFolderBtn" class="btn secondary">
+                            <i class="fas fa-folder-plus"></i> New Folder
+                        </button>
+                        <button id="addNoteBtn" class="btn primary">
+                            <i class="fas fa-plus"></i> New Note
+                        </button>
+                        <div class="notes-filter">
+                            <select id="noteFilter">
+                                <option value="all">All Notes</option>
+                                <option value="favorites">Favorites</option>
+                                <option value="recent">Recent</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notes-layout">
+                    <div class="folders-sidebar">
+                        <div class="folders-header">
+                            <h2>Folders</h2>
+                        </div>
+                        <div class="folders-list" id="foldersList">
+                            <div class="folder-item active" data-folder-id="all">
+                                <i class="fas fa-folder"></i>
+                                <span>All Notes</span>
+                                <span class="note-count">0</span>
+                            </div>
+                            <!-- Folders will be dynamically added here -->
+                        </div>
+                    </div>
+
+                    <div class="notes-content">
+                        <div class="notes-grid" id="notesGrid">
+                            <!-- Notes will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Note Template Modal -->
+    <div class="modal" id="noteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>New Note</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="noteForm">
+                    <div class="form-group">
+                        <label for="noteTitle">Title</label>
+                        <input type="text" id="noteTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="noteContent">Content</label>
+                        <textarea id="noteContent" rows="6" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="noteFolder">Folder</label>
+                        <select id="noteFolder">
+                            <option value="">No Folder</option>
+                            <!-- Folders will be dynamically added here -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="noteColor">Color</label>
+                        <div class="color-picker">
+                            <input type="radio" name="noteColor" value="yellow" id="colorYellow" checked>
+                            <label for="colorYellow" class="color-option yellow"></label>
+                            <input type="radio" name="noteColor" value="green" id="colorGreen">
+                            <label for="colorGreen" class="color-option green"></label>
+                            <input type="radio" name="noteColor" value="blue" id="colorBlue">
+                            <label for="colorBlue" class="color-option blue"></label>
+                            <input type="radio" name="noteColor" value="pink" id="colorPink">
+                            <label for="colorPink" class="color-option pink"></label>
+                            <input type="radio" name="noteColor" value="purple" id="colorPurple">
+                            <label for="colorPurple" class="color-option purple"></label>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn primary">Save Note</button>
+                        <button type="button" class="btn secondary" onclick="closeNoteModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Folder Modal -->
+    <div class="modal" id="folderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>New Folder</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="folderForm">
+                    <div class="form-group">
+                        <label for="folderName">Folder Name</label>
+                        <input type="text" id="folderName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="folderColor">Color</label>
+                        <div class="color-picker">
+                            <input type="radio" name="folderColor" value="yellow" id="folderColorYellow" checked>
+                            <label for="folderColorYellow" class="color-option yellow"></label>
+                            <input type="radio" name="folderColor" value="green" id="folderColorGreen">
+                            <label for="folderColorGreen" class="color-option green"></label>
+                            <input type="radio" name="folderColor" value="blue" id="folderColorBlue">
+                            <label for="folderColorBlue" class="color-option blue"></label>
+                            <input type="radio" name="folderColor" value="pink" id="folderColorPink">
+                            <label for="folderColorPink" class="color-option pink"></label>
+                            <input type="radio" name="folderColor" value="purple" id="folderColorPurple">
+                            <label for="folderColorPurple" class="color-option purple"></label>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn primary">Create Folder</button>
+                        <button type="button" class="btn secondary" onclick="closeFolderModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script src="shared.js"></script>
+    <script src="notes.js"></script>
+</body>
+</html> 

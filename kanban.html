@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board - Productivity Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="logo">
+                <a href="index.html">
+                    <i class="fas fa-tasks"></i>
+                    <span>Productivity</span>
+                </a>
+            </div>
+            <nav>
+                <a href="index.html">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="kanban.html" class="active">
+                    <i class="fas fa-columns"></i>
+                    <span>Kanban Board</span>
+                </a>
+                <a href="planning.html">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Planning</span>
+                </a>
+                <a href="diagrams.html">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Diagrams</span>
+                </a>
+                <a href="notes.html">
+                    <i class="fas fa-sticky-note"></i>
+                    <span>Notes</span>
+                </a>
+                <a href="todo.html">
+                    <i class="fas fa-check-square"></i>
+                    <span>To-Do List</span>
+                </a>
+            </nav>
+            <div class="global-search">
+                <input type="text" id="globalSearch" placeholder="Search across all...">
+                <button id="searchButton"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="header-left">
+                    <select id="projectSelector" onchange="switchProject(this.value)" data-shortcut="Ctrl+S"></select>
+                    <button onclick="showNewProjectModal()" data-shortcut="Ctrl+N">+ New Project</button>
+                </div>
+                <div class="header-right">
+                    <button onclick="exportProject()">📤 Export</button>
+                    <input type="file" id="importFile" style="display:none" onchange="importProject(event)" />
+                    <button onclick="document.getElementById('importFile').click()">📥 Import</button>
+                </div>
+            </header>
+
+            <div class="board">
+                <div class="column" id="todo">
+                    <h2>To Do</h2>
+                    <div class="task-list" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                    <button onclick="showNewTaskModal('todo')" data-shortcut="Ctrl+T">+ Add Task</button>
+                </div>
+                <div class="column" id="inprogress">
+                    <h2>In Progress</h2>
+                    <div class="task-list" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                    <button onclick="showNewTaskModal('inprogress')" data-shortcut="Ctrl+I">+ Add Task</button>
+                </div>
+                <div class="column" id="done">
+                    <h2>Done</h2>
+                    <div class="task-list" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                    <button onclick="showNewTaskModal('done')" data-shortcut="Ctrl+D">+ Add Task</button>
+                </div>
+            </div>
+
+            <section class="calendar-section">
+                <h2>📅 Calendar View</h2>
+                <div id="calendar"></div>
+            </section>
+
+            <section class="stats-section">
+                <h2>📊 Progress Statistics</h2>
+                <div id="stats"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for new project -->
+    <div id="newProjectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Project</h2>
+                <button class="close-btn" onclick="closeNewProjectModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="project-templates">
+                    <h3>Choose a template or create custom:</h3>
+                    <div class="template-grid">
+                        <div class="template-card" onclick="selectTemplate('basic')">
+                            <h4>Basic Project</h4>
+                            <p>Simple project with basic columns</p>
+                        </div>
+                        <div class="template-card" onclick="selectTemplate('agile')">
+                            <h4>Agile Project</h4>
+                            <p>Project with sprint planning</p>
+                        </div>
+                        <div class="template-card" onclick="selectTemplate('bug')">
+                            <h4>Bug Tracking</h4>
+                            <p>Project for tracking issues</p>
+                        </div>
+                        <div class="template-card" onclick="selectTemplate('custom')">
+                            <h4>Custom Project</h4>
+                            <p>Create your own structure</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-details" style="display: none;">
+                    <div class="form-group">
+                        <label for="projectName">Project Name:</label>
+                        <input type="text" id="projectName" placeholder="Enter project name">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectDescription">Description (optional):</label>
+                        <textarea id="projectDescription" placeholder="Enter project description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Columns:</label>
+                        <div id="columnList">
+                            <div class="column-item">
+                                <input type="text" value="To Do" readonly>
+                            </div>
+                            <div class="column-item">
+                                <input type="text" value="In Progress" readonly>
+                            </div>
+                            <div class="column-item">
+                                <input type="text" value="Done" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button onclick="closeNewProjectModal()" class="cancel-btn">Cancel</button>
+                        <button onclick="createNewProject()" class="create-btn">Create Project</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for new task -->
+    <div id="newTaskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Task</h2>
+                <button class="close-btn" onclick="closeNewTaskModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="task-templates">
+                    <h3>Choose a template or create custom:</h3>
+                    <div class="template-grid">
+                        <div class="template-card" onclick="selectTaskTemplate('feature')">
+                            <h4>Feature</h4>
+                            <p>New feature implementation</p>
+                        </div>
+                        <div class="template-card" onclick="selectTaskTemplate('bug')">
+                            <h4>Bug Fix</h4>
+                            <p>Bug report and fix</p>
+                        </div>
+                        <div class="template-card" onclick="selectTaskTemplate('improvement')">
+                            <h4>Improvement</h4>
+                            <p>Enhancement to existing feature</p>
+                        </div>
+                        <div class="template-card" onclick="selectTaskTemplate('custom')">
+                            <h4>Custom Task</h4>
+                            <p>Create your own task</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="task-details" style="display: none;">
+                    <div class="form-group">
+                        <label for="taskTitle">Task Title:</label>
+                        <input type="text" id="taskTitle" placeholder="Enter task title">
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDescription">Description:</label>
+                        <textarea id="taskDescription" placeholder="Enter task description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDueDate">Due Date:</label>
+                        <input type="date" id="taskDueDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="taskPriority">Priority:</label>
+                        <select id="taskPriority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskLabel">Label:</label>
+                        <select id="taskLabel">
+                            <option value="Task">Task</option>
+                            <option value="Feature">Feature</option>
+                            <option value="Bug">Bug</option>
+                            <option value="Improvement">Improvement</option>
+                            <option value="Documentation">Documentation</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskAssignee">Assignee (optional):</label>
+                        <input type="text" id="taskAssignee" placeholder="Enter assignee name">
+                    </div>
+                    <div class="form-group">
+                        <label for="taskEstimate">Time Estimate (hours):</label>
+                        <input type="number" id="taskEstimate" min="0" step="0.5" placeholder="Enter estimated hours">
+                    </div>
+                    <div class="form-actions">
+                        <button onclick="closeNewTaskModal()" class="cancel-btn">Cancel</button>
+                        <button onclick="createNewTask()" class="create-btn">Create Task</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script src="shared.js"></script>
+    <script src="kanban.js"></script>
+</body>
+</html> 

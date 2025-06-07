@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning - Productivity Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <h1>Productivity Hub</h1>
+            </div>
+            <div class="global-search">
+                <input type="text" id="globalSearch" placeholder="Search across all...">
+                <button id="searchButton"><i class="fas fa-search"></i></button>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li>
+                        <a href="index.html">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="kanban.html">
+                            <i class="fas fa-columns"></i>
+                            <span>Kanban Board</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="notes.html">
+                            <i class="fas fa-sticky-note"></i>
+                            <span>Notes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="todo.html">
+                            <i class="fas fa-tasks"></i>
+                            <span>To-Do List</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="planning.html">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Planning</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="diagrams.html">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>Diagrams</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="planning-container">
+                <div class="planning-header">
+                    <h1>Planning</h1>
+                    <div class="planning-actions">
+                        <button class="btn" onclick="showNewEventModal()">
+                            <i class="fas fa-plus"></i> New Event
+                        </button>
+                        <button class="btn" onclick="showNewMilestoneModal()">
+                            <i class="fas fa-flag"></i> New Milestone
+                        </button>
+                        <button class="btn" onclick="showNewGoalModal()">
+                            <i class="fas fa-bullseye"></i> New Goal
+                        </button>
+                    </div>
+                </div>
+
+                <div class="planning-grid">
+                    <div class="calendar-section">
+                        <div id="calendar"></div>
+                    </div>
+                    
+                    <div class="planning-sidebar">
+                        <div class="goals-section">
+                            <h2>Goals</h2>
+                            <div class="goals-list" id="goalsList">
+                                <!-- Goals will be populated here -->
+                            </div>
+                            <button class="btn btn-secondary" onclick="showNewGoalModal()">
+                                <i class="fas fa-plus"></i> Add Goal
+                            </button>
+                        </div>
+
+                        <div class="milestones-section">
+                            <h2>Milestones</h2>
+                            <div class="milestones-list" id="milestonesList">
+                                <!-- Milestones will be populated here -->
+                            </div>
+                            <button class="btn btn-secondary" onclick="showNewMilestoneModal()">
+                                <i class="fas fa-plus"></i> Add Milestone
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- New Event Modal -->
+    <div class="modal" id="newEventModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>New Event</h2>
+                <button class="close-button" onclick="closeNewEventModal()">&times;</button>
+            </div>
+            <form id="eventForm" onsubmit="createNewEvent(event)">
+                <div class="form-group">
+                    <label for="eventTitle">Title</label>
+                    <input type="text" id="eventTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="eventDescription">Description</label>
+                    <textarea id="eventDescription"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventStart">Start Date</label>
+                        <input type="datetime-local" id="eventStart" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventEnd">End Date</label>
+                        <input type="datetime-local" id="eventEnd" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="eventColor">Color</label>
+                    <input type="color" id="eventColor" value="#3788d8">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Create Event</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeNewEventModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- New Milestone Modal -->
+    <div class="modal" id="newMilestoneModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>New Milestone</h2>
+                <button class="close-button" onclick="closeNewMilestoneModal()">&times;</button>
+            </div>
+            <form id="milestoneForm" onsubmit="createNewMilestone(event)">
+                <div class="form-group">
+                    <label for="milestoneTitle">Title</label>
+                    <input type="text" id="milestoneTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="milestoneDescription">Description</label>
+                    <textarea id="milestoneDescription"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="milestoneDate">Date</label>
+                    <input type="date" id="milestoneDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="milestoneStatus">Status</label>
+                    <select id="milestoneStatus">
+                        <option value="pending">Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Create Milestone</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeNewMilestoneModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- New Goal Modal -->
+    <div class="modal" id="newGoalModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>New Goal</h2>
+                <button class="close-button" onclick="closeNewGoalModal()">&times;</button>
+            </div>
+            <form id="goalForm" onsubmit="createNewGoal(event)">
+                <div class="form-group">
+                    <label for="goalTitle">Title</label>
+                    <input type="text" id="goalTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="goalDescription">Description</label>
+                    <textarea id="goalDescription"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="goalStart">Start Date</label>
+                        <input type="date" id="goalStart" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="goalEnd">Target Date</label>
+                        <input type="date" id="goalEnd" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="goalPriority">Priority</label>
+                    <select id="goalPriority">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="goalProgress">Progress</label>
+                    <input type="range" id="goalProgress" min="0" max="100" value="0">
+                    <span id="goalProgressValue">0%</span>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Create Goal</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeNewGoalModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+    <script src="search.js"></script>
+    <script src="shortcuts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script src="shared.js"></script>
+    <script src="planning.js"></script>
+</body>
+</html> 
